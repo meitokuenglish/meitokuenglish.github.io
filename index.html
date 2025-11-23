@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phonics Activity Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Vibrant, Kid-Friendly Palette */
+            --bg-color: #eef9fe;
+            --card-bg: #ffffff;
+            --text-main: #2c3e50;
+            --text-sub: #637b96;
+            
+            /* Activity Specific Colors */
+            --color-sorter: #4facfe;
+            --color-sorter-dark: #00f2fe;
+            --color-voiced: #43e97b; 
+            --color-voiced-dark: #38f9d7;
+            --color-mole: #ff9a9e;
+            --color-mole-dark: #fecfef;
+            --color-nonsense: #a18cd1;
+            --color-nonsense-dark: #fbc2eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: 
+                radial-gradient(#dcebf5 15%, transparent 16%),
+                radial-gradient(#dcebf5 15%, transparent 16%);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+        }
+
+        /* Header Section */
+        header {
+            text-align: center;
+            padding: 60px 20px 40px;
+            width: 100%;
+            max-width: 800px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+            text-shadow: 3px 3px 0px #fff, 5px 5px 0px rgba(0,0,0,0.05);
+            letter-spacing: 1px;
+        }
+
+        h1 span {
+            color: #ff6b6b;
+        }
+
+        p.subtitle {
+            font-size: 1.4rem;
+            color: var(--text-sub);
+            font-weight: 400;
+        }
+
+        /* Main Grid */
+        main {
+            width: 100%;
+            max-width: 1100px;
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            width: 100%;
+            padding-bottom: 40px;
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--card-bg);
+            border-radius: 25px;
+            padding: 35px 25px;
+            text-align: center;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 
+                0 10px 20px rgba(0,0,0,0.05), 
+                0 6px 6px rgba(0,0,0,0.05),
+                0 0 0 0px transparent; /* For focus state */
+            border-bottom: 8px solid rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 
+                0 15px 30px rgba(0,0,0,0.1), 
+                0 10px 10px rgba(0,0,0,0.05);
+        }
+
+        .card:active {
+            transform: translateY(-2px);
+            border-bottom-width: 4px;
+            margin-top: 4px;
+        }
+
+        /* Icon Container */
+        .icon-wrapper {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: white;
+            transition: transform 0.4s ease;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+
+        .card:hover .icon-wrapper {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Typography within Cards */
+        .card h2 {
+            font-size: 1.6rem;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .card p {
+            font-size: 1rem;
+            color: var(--text-sub);
+            line-height: 1.5;
+        }
+
+        /* Theme Specifics */
+        /* Vowel Sorter (Blue) */
+        .theme-sorter .icon-wrapper {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        .theme-sorter:hover { border-bottom-color: #4facfe; }
+
+        /* Voiced/Unvoiced (Green) */
+        .theme-voiced .icon-wrapper {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        .theme-voiced:hover { border-bottom-color: #43e97b; }
+
+        /* Whack-a-Mole (Orange/Red) */
+        .theme-mole .icon-wrapper {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+        }
+        .theme-mole:hover { border-bottom-color: #ff9a9e; }
+
+        /* Nonsense Words (Purple) */
+        .theme-nonsense .icon-wrapper {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .theme-nonsense:hover { border-bottom-color: #667eea; }
+
+        /* Play Button Overlay (Appears on Hover) */
+        .play-btn {
+            margin-top: 20px;
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            background: #f0f0f0;
+            color: #555;
+        }
+
+        .card:hover .play-btn {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            padding: 30px;
+            text-align: center;
+            color: #8898aa;
+            font-size: 0.9rem;
+        }
+
+        /* Toast Notification Styles */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #333;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Animation Keyframes */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Responsive Adjustments */
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            .card { padding: 25px 20px; }
+            .icon-wrapper { width: 70px; height: 70px; font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Phonics <span>Fun</span> Hub</h1>
+        <p class="subtitle">Select an activity to begin your adventure!</p>
+    </header>
+
+    <main>
+        <div class="activity-grid">
+            
+            <!-- Vowel Sorter -->
+            <!-- Note: In a real site, href would be "vowel-sorter.html" -->
+            <a href="#" class="card theme-sorter" onclick="navigateTo('Vowel Sorter')">
+                <div class="icon-wrapper">
+                    <i class="fa-solid fa-arrow-down-a-z"></i>
+                </div>
+                <h2>Vowel Sorter</h2>
+                <p>Drag short and long vowels into the correct baskets.</p>
+                <div class="play-btn">Play Now</div>
+            </a>
+
+            <!-- Voiced and Unvoiced -->
+            <a href="#" class="card theme-voiced" onclick="navigateTo('Voiced vs. Unvoiced')">
+                <div class="icon-wrapper">
+                    <i class="fa-solid fa-microphone-lines"></i>
+                </div>
+                <h2>Voiced vs. Unvoiced</h2>
+                <p>Feel the vibration! Learn which consonants use your voice.</p>
+                <div class="play-btn">Play Now</div>
+            </a>
+
+            <!-- Whack-a-mole -->
+            <a href="#" class="card theme-mole" onclick="navigateTo('Phonics Whack-a-Mole')">
+                <div class="icon-wrapper">
+                    <i class="fa-solid fa-gavel"></i>
+                </div>
+                <h2>Whack-a-Mole</h2>
+                <p>Be quick! Whack the correct sounds before they hide.</p>
+                <div class="play-btn">Play Now</div>
+            </a>
+
+            <!-- Nonsense Words -->
+            <a href="#" class="card theme-nonsense" onclick="navigateTo('Nonsense Words')">
+                <div class="icon-wrapper">
+                    <i class="fa-solid fa-rocket"></i>
+                </div>
+                <h2>Nonsense Words</h2>
+                <p>Read the silly alien words. Do they follow the rules?</p>
+                <div class="play-btn">Play Now</div>
+            </a>
+
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2024 Phonics Fun Hub &bull; Learning through Play
+    </footer>
+
+    <!-- Toast Notification Element -->
+    <div id="toast" class="toast">
+        <i class="fa-solid fa-circle-info"></i>
+        <span id="toast-msg">Navigating...</span>
+    </div>
+
+    <script>
+        // This script simulates navigation since the other pages don't exist in this preview.
+        function navigateTo(activityName) {
+            // Prevent default link behavior (jumping to top of page)
+            event.preventDefault();
+
+            const toast = document.getElementById('toast');
+            const msg = document.getElementById('toast-msg');
+            
+            // Update message
+            msg.textContent = `Loading ${activityName}...`;
+            
+            // Show toast
+            toast.classList.add('show');
+
+            // Hide toast after 2 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                
+                // In a real scenario, this is where: window.location.href = 'vowel-sorter.html';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
