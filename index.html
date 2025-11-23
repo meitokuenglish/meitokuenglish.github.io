@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Phonics Activity Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,14 +33,18 @@
             padding: 0;
         }
 
+        html, body {
+            height: 100%; /* Force full height */
+            width: 100%;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
         body {
             font-family: 'Fredoka', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex-direction: column; /* Stack Header, Main, Footer */
             background-image: 
                 radial-gradient(#dcebf5 15%, transparent 16%),
                 radial-gradient(#dcebf5 15%, transparent 16%);
@@ -48,21 +52,21 @@
             background-position: 0 0, 30px 30px;
         }
 
-        /* Header Section */
+        /* Header Section - Compact */
         header {
             text-align: center;
-            padding: 60px 20px 40px;
-            width: 100%;
-            max-width: 800px;
+            padding: 2vh 20px 1vh; /* Use viewport height for padding */
+            flex: 0 0 auto; /* Don't grow, don't shrink */
             animation: fadeInDown 0.8s ease-out;
+            z-index: 10;
         }
 
         h1 {
-            font-size: 3.5rem;
+            font-size: clamp(1.5rem, 5vh, 3.5rem); /* Responsive font size */
             font-weight: 700;
-            margin-bottom: 15px;
+            margin-bottom: 0.5vh;
             color: #333;
-            text-shadow: 3px 3px 0px #fff, 5px 5px 0px rgba(0,0,0,0.05);
+            text-shadow: 2px 2px 0px #fff;
             letter-spacing: 1px;
         }
 
@@ -71,76 +75,81 @@
         }
 
         p.subtitle {
-            font-size: 1.4rem;
+            font-size: clamp(0.8rem, 2vh, 1.2rem);
             color: var(--text-sub);
             font-weight: 400;
         }
 
-        /* Main Grid */
+        /* Main Grid Container - Fills remaining space */
         main {
+            flex: 1; /* Take up all available vertical space */
             width: 100%;
-            max-width: 1100px;
-            padding: 20px;
-            flex-grow: 1;
+            max-width: 1400px; /* Max width for ultra-wide screens */
+            margin: 0 auto;
+            padding: 2vh 2vw;
             display: flex;
             justify-content: center;
+            align-items: center;
+            min-height: 0; /* Crucial for nested flex scrolling behavior */
         }
 
         .activity-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
+            /* 2x2 Grid Layout */
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: clamp(10px, 2vw, 30px);
             width: 100%;
-            padding-bottom: 40px;
+            height: 100%;
         }
 
         /* Card Styles */
         .card {
             background: var(--card-bg);
-            border-radius: 25px;
-            padding: 35px 25px;
+            border-radius: clamp(15px, 2vw, 25px);
+            padding: 2vh 2vw;
             text-align: center;
             text-decoration: none;
             position: relative;
             overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.2s ease;
             box-shadow: 
-                0 10px 20px rgba(0,0,0,0.05), 
-                0 6px 6px rgba(0,0,0,0.05),
-                0 0 0 0px transparent; /* For focus state */
-            border-bottom: 8px solid rgba(0,0,0,0.05);
+                0 5px 15px rgba(0,0,0,0.05), 
+                0 3px 3px rgba(0,0,0,0.05);
+            border-bottom: 6px solid rgba(0,0,0,0.05);
+            
+            /* Flex centering for contents */
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             cursor: pointer;
         }
 
         .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 
-                0 15px 30px rgba(0,0,0,0.1), 
-                0 10px 10px rgba(0,0,0,0.05);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
         .card:active {
-            transform: translateY(-2px);
-            border-bottom-width: 4px;
-            margin-top: 4px;
+            transform: translateY(-1px);
+            border-bottom-width: 3px;
         }
 
-        /* Icon Container */
+        /* Icon Container - Responsive Size */
         .icon-wrapper {
-            width: 90px;
-            height: 90px;
+            width: clamp(50px, 10vh, 90px);
+            height: clamp(50px, 10vh, 90px);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+            font-size: clamp(1.5rem, 4vh, 2.5rem);
+            margin-bottom: 2vh;
             color: white;
             transition: transform 0.4s ease;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            flex-shrink: 0; /* Prevent icon from squishing */
         }
 
         .card:hover .icon-wrapper {
@@ -149,56 +158,57 @@
 
         /* Typography within Cards */
         .card h2 {
-            font-size: 1.6rem;
+            font-size: clamp(1rem, 2.5vh, 1.8rem);
             color: var(--text-main);
-            margin-bottom: 12px;
+            margin-bottom: 1vh;
             font-weight: 700;
+            line-height: 1.2;
         }
 
         .card p {
-            font-size: 1rem;
+            font-size: clamp(0.75rem, 1.8vh, 1rem);
             color: var(--text-sub);
-            line-height: 1.5;
+            line-height: 1.3;
+            max-width: 90%;
+            /* Hide description if screen is extremely short */
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         /* Theme Specifics */
-        /* Vowel Sorter (Blue) */
-        .theme-sorter .icon-wrapper {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
+        .theme-sorter .icon-wrapper { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
         .theme-sorter:hover { border-bottom-color: #4facfe; }
 
-        /* Voiced/Unvoiced (Green) */
-        .theme-voiced .icon-wrapper {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-        }
+        .theme-voiced .icon-wrapper { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
         .theme-voiced:hover { border-bottom-color: #43e97b; }
 
-        /* Whack-a-Mole (Orange/Red) */
-        .theme-mole .icon-wrapper {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-        }
+        .theme-mole .icon-wrapper { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); }
         .theme-mole:hover { border-bottom-color: #ff9a9e; }
 
-        /* Nonsense Words (Purple) */
-        .theme-nonsense .icon-wrapper {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
+        .theme-nonsense .icon-wrapper { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
         .theme-nonsense:hover { border-bottom-color: #667eea; }
 
-        /* Play Button Overlay (Appears on Hover) */
+        /* Play Button - Only visible on larger screens/heights to save space */
         .play-btn {
-            margin-top: 20px;
-            padding: 8px 24px;
+            margin-top: auto; /* Push to bottom */
+            padding: 8px 16px;
             border-radius: 20px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
             opacity: 0;
             transform: translateY(10px);
             transition: all 0.3s ease;
             background: #f0f0f0;
             color: #555;
+            display: none; /* Hidden by default to save space */
+        }
+
+        /* Only show play button on screens tall enough to handle it */
+        @media (min-height: 600px) {
+            .play-btn { display: block; }
         }
 
         .card:hover .play-btn {
@@ -206,16 +216,16 @@
             transform: translateY(0);
         }
 
-        /* Footer */
+        /* Footer - Compact */
         footer {
-            margin-top: auto;
-            padding: 30px;
+            flex: 0 0 auto;
+            padding: 10px;
             text-align: center;
             color: #8898aa;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
 
-        /* Toast Notification Styles */
+        /* Toast Notification */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -240,17 +250,15 @@
             opacity: 1;
         }
 
-        /* Animation Keyframes */
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Mobile Responsive Adjustments */
-        @media (max-width: 600px) {
-            h1 { font-size: 2.5rem; }
-            .card { padding: 25px 20px; }
-            .icon-wrapper { width: 70px; height: 70px; font-size: 2rem; }
+        /* Mobile Adjustments for Extreme Aspect Ratios */
+        @media (max-width: 400px) {
+            .card { padding: 10px; }
+            .card h2 { margin-bottom: 2px; }
         }
     </style>
 </head>
@@ -258,21 +266,20 @@
 
     <header>
         <h1>Phonics <span>Fun</span> Hub</h1>
-        <p class="subtitle">Select an activity to begin your adventure!</p>
+        <p class="subtitle">Select an activity to begin!</p>
     </header>
 
     <main>
         <div class="activity-grid">
             
             <!-- Vowel Sorter -->
-            <!-- Note: In a real site, href would be "vowel-sorter.html" -->
             <a href="#" class="card theme-sorter" onclick="navigateTo('Vowel Sorter')">
                 <div class="icon-wrapper">
                     <i class="fa-solid fa-arrow-down-a-z"></i>
                 </div>
                 <h2>Vowel Sorter</h2>
-                <p>Drag short and long vowels into the correct baskets.</p>
-                <div class="play-btn">Play Now</div>
+                <p>Sort the vowels.</p>
+                <div class="play-btn">Play</div>
             </a>
 
             <!-- Voiced and Unvoiced -->
@@ -280,9 +287,9 @@
                 <div class="icon-wrapper">
                     <i class="fa-solid fa-microphone-lines"></i>
                 </div>
-                <h2>Voiced vs. Unvoiced</h2>
-                <p>Feel the vibration! Learn which consonants use your voice.</p>
-                <div class="play-btn">Play Now</div>
+                <h2>Voice Check</h2>
+                <p>Feel the vibration!</p>
+                <div class="play-btn">Play</div>
             </a>
 
             <!-- Whack-a-mole -->
@@ -291,8 +298,8 @@
                     <i class="fa-solid fa-gavel"></i>
                 </div>
                 <h2>Whack-a-Mole</h2>
-                <p>Be quick! Whack the correct sounds before they hide.</p>
-                <div class="play-btn">Play Now</div>
+                <p>Whack the sounds!</p>
+                <div class="play-btn">Play</div>
             </a>
 
             <!-- Nonsense Words -->
@@ -300,16 +307,16 @@
                 <div class="icon-wrapper">
                     <i class="fa-solid fa-rocket"></i>
                 </div>
-                <h2>Nonsense Words</h2>
-                <p>Read the silly alien words. Do they follow the rules?</p>
-                <div class="play-btn">Play Now</div>
+                <h2>Alien Words</h2>
+                <p>Real or nonsense?</p>
+                <div class="play-btn">Play</div>
             </a>
 
         </div>
     </main>
 
     <footer>
-        &copy; 2024 Phonics Fun Hub &bull; Learning through Play
+        &copy; 2024 Phonics Fun Hub
     </footer>
 
     <!-- Toast Notification Element -->
@@ -319,25 +326,14 @@
     </div>
 
     <script>
-        // This script simulates navigation since the other pages don't exist in this preview.
         function navigateTo(activityName) {
-            // Prevent default link behavior (jumping to top of page)
             event.preventDefault();
-
             const toast = document.getElementById('toast');
             const msg = document.getElementById('toast-msg');
-            
-            // Update message
             msg.textContent = `Loading ${activityName}...`;
-            
-            // Show toast
             toast.classList.add('show');
-
-            // Hide toast after 2 seconds
             setTimeout(() => {
                 toast.classList.remove('show');
-                
-                // In a real scenario, this is where: window.location.href = 'vowel-sorter.html';
             }, 2000);
         }
     </script>
